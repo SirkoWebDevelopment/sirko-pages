@@ -1,0 +1,39 @@
+.footer {
+  border-top: 1px solid var(--line);
+  background: var(--paper);
+
+  &__inner {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 34px 28px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  &__brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  &__mark {
+    width: 24px;
+    height: 24px;
+    border-radius: 7px;
+    background: var(--accent);
+  }
+
+  &__name {
+    font-family: var(--font-head);
+    font-weight: 600;
+    font-size: 16px;
+  }
+
+  &__copy {
+    font-size: 13.5px;
+    color: var(--muted);
+  }
+}
