@@ -1,11 +1,12 @@
 import { useEffect } from 'react'
-import { Nav } from './components/Nav'
-import { Hero } from './components/Hero'
-import { WhoWeHelp } from './components/WhoWeHelp'
-import { Portfolio } from './components/Portfolio'
-import { Story } from './components/Story'
-import { Contact } from './components/Contact'
-import { Footer } from './components/Footer'
+import { LanguageProvider } from './lang/LanguageProvider'
+import { Nav } from './components/helpers/navigation/Nav'
+import { Hero } from './components/sections/hero/Hero'
+import { WhoWeHelp } from './components/sections/whowehelp/WhoWeHelp'
+import { Portfolio } from './components/sections/portfolio/Portfolio'
+import { Story } from './components/sections/story/Story'
+import { Contact } from './components/sections/contact/Contact'
+import { Footer } from './components/helpers/footer/Footer'
 import { PALETTES, FONTS, ACTIVE_THEME } from './theme'
 
 const App = () => {
@@ -26,18 +27,17 @@ const App = () => {
   }, [])
 
   return (
-    <div id="top">
-      <Nav />
-      <Hero
-        variant={ACTIVE_THEME.hero}
-        tagline="Free & straightforward websites for the non‑profits and small businesses who can't afford one — just like us."
-      />
-      <WhoWeHelp />
-      <Portfolio />
-      <Story />
-      <Contact />
-      <Footer />
-    </div>
+    <LanguageProvider>
+      <div id="top">
+        <Nav />
+        <Hero variant={ACTIVE_THEME.hero} />
+        <WhoWeHelp />
+        <Portfolio />
+        <Story />
+        <Contact />
+        <Footer />
+      </div>
+    </LanguageProvider>
   )
 }
 

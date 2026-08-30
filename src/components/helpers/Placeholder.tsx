@@ -1,4 +1,4 @@
-import type { CSSVars } from '../lib/cssVars'
+import type { CSSVars } from '../../lib/cssVars'
 
 export type PlaceholderProps = {
   label: string

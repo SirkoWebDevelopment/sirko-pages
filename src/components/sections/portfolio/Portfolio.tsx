@@ -1,33 +1,24 @@
-import { SectionHead } from './SectionHead'
-import { Placeholder } from './Placeholder'
-import korshakLogo from '../assets/korshak-logo.png'
+import { SectionHead } from '../../helpers/SectionHead'
+import { Placeholder } from '../../helpers/Placeholder'
+import { useLanguage } from '../../../lang/language'
+import { PORTFOLIO_TRANSLATIONS } from './Portfolio.lang'
+import korshakLogo from '../../../assets/korshak-logo.png'
 
-const PROJECTS = [
-  {
-    name: 'Dr. Korshak Ultrasound Diagnostics',
-    tag: 'Healthcare · 2025',
-    blurb: 'A clear, trustworthy site for a solo ultrasound practice in Rivne, so patients can find services and get in touch at a glance.',
-    url: 'https://uzd-rivne-korshak.rv.ua/',
-    logo: korshakLogo,
-  },
-  {
-    name: 'Sirko Dev Studio',
-    tag: 'Our own site · 2026',
-    blurb: "This very site — designed and built freely, to show what's possible on a non-profit budget.",
-    url: '#top',
-  },
+const PROJECTS_META = [
+  { url: 'https://uzd-rivne-korshak.rv.ua/', logo: korshakLogo },
+  { url: '#top' },
 ]
 
 export const Portfolio = () => {
+  const { language } = useLanguage()
+  const t = PORTFOLIO_TRANSLATIONS[language]
+  const projects = PROJECTS_META.map((meta, i) => ({ ...meta, ...t.projects[i] }))
+
   return (
     <section id="portfolio" className="portfolio">
-      <SectionHead
-        kicker="Portfolio"
-        title="Sites we've built, given freely."
-        intro="A few of the non-profits and small businesses we've helped get online. Every site is fast, accessible, and theirs to keep."
-      />
+      <SectionHead kicker={t.kicker} title={t.title} intro={t.intro} />
       <div className="portfolio__grid">
-        {PROJECTS.map((p, i) => (
+        {projects.map((p, i) => (
           <a key={i} href={p.url ?? '#contact'} target={p.url ? '_blank' : undefined} rel={p.url ? 'noreferrer' : undefined} className="project-card">
             <div className="project-card__thumb">
               {p.logo ? (
@@ -43,7 +34,7 @@ export const Portfolio = () => {
               <h3 className="project-card__name">{p.name}</h3>
               <p className="project-card__blurb">{p.blurb}</p>
               <span className="project-card__link">
-                View case <span className="project-card__arrow">→</span>
+                {t.viewCaseLabel} <span className="project-card__arrow">→</span>
               </span>
             </div>
           </a>
@@ -55,9 +46,9 @@ export const Portfolio = () => {
             </div>
           </div>
           <div className="project-card__body">
-            <div className="project-card__tag">Coming soon</div>
-            <h3 className="project-card__name">More projects on the way</h3>
-            <p className="project-card__blurb">We're just getting started — new non-profits and small businesses will land here as we go.</p>
+            <div className="project-card__tag">{t.comingSoonTag}</div>
+            <h3 className="project-card__name">{t.comingSoonTitle}</h3>
+            <p className="project-card__blurb">{t.comingSoonBlurb}</p>
           </div>
         </div>
       </div>

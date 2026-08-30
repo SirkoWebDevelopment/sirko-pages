@@ -1,5 +1,7 @@
 import { useState, type ChangeEvent, type FormEvent } from 'react'
-import { SectionHead } from './SectionHead'
+import { SectionHead } from '../../helpers/SectionHead'
+import { useLanguage } from '../../../lang/language'
+import { CONTACT_TRANSLATIONS } from './Contact.lang'
 
 type FieldProps = {
   label: string
@@ -25,13 +27,13 @@ const Field = ({ label, type = 'text', textarea, value, onChange, error }: Field
   )
 }
 
-const CONTACT_ROWS = [
-  { l: 'Email', v: 'hello@sirko.dev', h: 'mailto:hello@sirko.dev' },
-  { l: 'Based in', v: 'Remote · working with non-profits anywhere', h: null },
-  { l: 'Response time', v: "Usually within a few days (it's a side project — with heart)", h: null },
-]
+const CONTACT_ROWS_META: { href: string | null }[] = [{ href: 'mailto:hello@sirko.dev' }, { href: null }, { href: null }]
 
 export const Contact = () => {
+  const { language } = useLanguage()
+  const t = CONTACT_TRANSLATIONS[language]
+  const rows = CONTACT_ROWS_META.map((meta, i) => ({ ...meta, ...t.rows[i] }))
+
   const [f, setF] = useState({ name: '', email: '', org: '', msg: '' })
   const [errs, setErrs] = useState<{ name?: string; email?: string; msg?: string }>({})
   const [sent, setSent] = useState(false)
@@ -42,9 +44,9 @@ export const Contact = () => {
   const submit = (e: FormEvent) => {
     e.preventDefault()
     const er: typeof errs = {}
-    if (!f.name.trim()) er.name = 'Please add your name.'
-    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(f.email)) er.email = 'Enter a valid email.'
-    if (!f.msg.trim()) er.msg = 'Tell us a little about your project.'
+    if (!f.name.trim()) er.name = t.errors.name
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(f.email)) er.email = t.errors.email
+    if (!f.msg.trim()) er.msg = t.errors.msg
     setErrs(er)
     if (Object.keys(er).length === 0) setSent(true)
   }
@@ -53,21 +55,17 @@ export const Contact = () => {
     <section id="contact" className="contact">
       <div className="contact__grid">
         <div>
-          <SectionHead
-            kicker="Contact"
-            title="Run a non-profit or small business? Let's build."
-            intro="Tell us what you do and what you need. If we're a fit, your website costs nothing."
-          />
+          <SectionHead kicker={t.kicker} title={t.title} intro={t.intro} />
           <div className="contact__rows">
-            {CONTACT_ROWS.map((r, i) => (
+            {rows.map((r, i) => (
               <div key={i} className="contact__row">
-                <span className="contact__row-label">{r.l}</span>
-                {r.h ? (
-                  <a href={r.h} className="contact__row-link">
-                    {r.v}
+                <span className="contact__row-label">{r.label}</span>
+                {r.href ? (
+                  <a href={r.href} className="contact__row-link">
+                    {r.value}
                   </a>
                 ) : (
-                  <span className="contact__row-value">{r.v}</span>
+                  <span className="contact__row-value">{r.value}</span>
                 )}
               </div>
             ))}
@@ -77,19 +75,19 @@ export const Contact = () => {
           {sent ? (
             <div className="contact-card__success">
               <div className="contact-card__success-icon">✓</div>
-              <h3 className="contact-card__success-title">Message sent — thank you!</h3>
-              <p className="contact-card__success-body">We'll be in touch soon. Sirko sends his regards. 🐾</p>
+              <h3 className="contact-card__success-title">{t.success.title}</h3>
+              <p className="contact-card__success-body">{t.success.body}</p>
             </div>
           ) : (
             <form onSubmit={submit} className="form" noValidate>
               <div className="form__row">
-                <Field label="Your name" value={f.name} onChange={upd('name')} error={errs.name} />
-                <Field label="Email" type="email" value={f.email} onChange={upd('email')} error={errs.email} />
+                <Field label={t.form.nameLabel} value={f.name} onChange={upd('name')} error={errs.name} />
+                <Field label={t.form.emailLabel} type="email" value={f.email} onChange={upd('email')} error={errs.email} />
               </div>
-              <Field label="Organization (optional)" value={f.org} onChange={upd('org')} />
-              <Field label="What do you need?" textarea value={f.msg} onChange={upd('msg')} error={errs.msg} />
+              <Field label={t.form.orgLabel} value={f.org} onChange={upd('org')} />
+              <Field label={t.form.messageLabel} textarea value={f.msg} onChange={upd('msg')} error={errs.msg} />
               <button type="submit" className="form__submit">
-                Send message
+                {t.form.submitLabel}
               </button>
             </form>
           )}
